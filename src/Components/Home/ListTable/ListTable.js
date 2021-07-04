@@ -4,32 +4,32 @@ import ListTableValue from './ListTableValue';
 
 const ListTable = () => {
 
-    const [user, setUser] = useState([]);
+    const [userHeader, setUserHeader] = useState([]);
+    const [userRow, setUserRow] = useState([]);
 
     useEffect(() => {
         fetch('http://localhost/api/list.php')
             .then(res => res.json())
-            .then(data => setUser(data.data.headers))
+            .then(data => setUserHeader([data.data]))
     }, [])
-    // user.map(us => console.log(us))
-    console.log(user);
+    // console.log(userHeader);
 
-    // useEffect(() => {
-    //     const load = async () => {
-    //         const data = await axios.get('http://localhost/api/list.php')
-    //         setUser(data);
-    //         // console.log(data.data.data.rows);
-    //     }
-    //     load();
-    // }, []);
-    // console.log(user.data.data);
+    useEffect(() => {
+        fetch('http://localhost/api/list.php')
+            .then(res => res.json())
+            .then(data => setUserRow(data.data.rows))
+    }, []);
+    // console.log(userRow);
 
 
     return (
         <div>
             {
-                user.map(user => <ListTableValue user={user}></ListTableValue>)
+                userHeader.map(userHeader => <ListTableValue userHeader={userHeader}></ListTableValue>)
             }
+            {/* {
+                userRow.map(userRow => <ListTableValue userRow={userRow}></ListTableValue>)
+            } */}
         </div>
     );
 };

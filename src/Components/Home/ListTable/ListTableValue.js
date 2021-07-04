@@ -1,46 +1,53 @@
 import React, { useEffect, useState } from 'react';
 
-const ListTableValue = ({ user }) => {
+const ListTableValue = ({ userHeader }) => {
+
+    const { headers, rows } = userHeader;
 
     const [tableHeader, setTableHeader] = useState([]);
+    const [tableRows, setTableRow] = useState([]);
 
-    const { id, name, message, created_at } = user;
+    // const { id } = userRow;
 
     useEffect(() => {
-        for (const property in user) {
-            setTableHeader(property);
-            console.log(property);
-        }
-    }, [])
+        var columnNames = Object.keys(headers[0])
+        setTableHeader(columnNames)
+    }, [headers])
 
     // useEffect(() => {
-    //     for (const property in user) {
-    //         setTableHeader(property);
-    //         console.log(property);
-    //     }
-    // })
+    //     rows.map(row =>
+    //         setTableRow(row)
+    //     )
+    // }, [rows])
 
+    console.log(rows)
 
-    console.log(user);
 
     return (
 
-        <div class="container">
-            <table class="table">
+        <div className="container">
+            <table className="table">
+
                 <thead>
                     <tr>
-                        <th scope="col">{id.title}</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        {
+                            tableHeader.map(tableHeader =>
+                                <th scope="col">{tableHeader}</th>
+                            )}
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                </tbody>
+
+                {
+                    rows.map(row =>
+                        <tbody>
+                            <tr>
+                                <td>{row.id}</td>
+                                <td>{row.name}</td>
+                                <td>{row.message}</td>
+                                <td>{row.created_at}</td>
+                            </tr>
+                        </tbody>
+                    )}
             </table>
         </div>
     );
