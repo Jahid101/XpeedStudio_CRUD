@@ -33,7 +33,7 @@ const ListTableValue = ({ userInfo }) => {
 
     return (
 
-        <div className="container">
+        <div className="container mt-3">
             <table className="table">
 
                 <thead>
@@ -49,7 +49,7 @@ const ListTableValue = ({ userInfo }) => {
                     rows.map(row =>
                         <tbody>
                             <tr>
-                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm">
+                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
                                     <td>{row.id}</td>
                                 </button>
                                 <td>{row.name}</td>

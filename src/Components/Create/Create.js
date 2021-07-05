@@ -79,13 +79,32 @@ const Create = () => {
 
         e.preventDefault();
 
+        //Sending data
+        const CreateInfo = {
+            user_name: e.target.user_name.value || '',
+            user_email: e.target.user_email.value || '',
+            user_gender: e.target.user_gender.value || '',
+            details: e.target.details.value || ''
+        };
+        console.log(CreateInfo)
+
+        if (validStatus) {
+            const url = `http://localhost/api/submit_form.php`;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(CreateInfo)
+            })
+        }
+
+
+        //Showing success messages
         if (validStatus) {
             fetch('http://localhost/api/submit_form.php')
                 .then(res => res.json())
                 .then(data => setSubmitted(data))
-        }
-        else {
-            alert('Type only letters')
         }
         if (submitted.status) {
             for (let i = 0; i < submitted.messages.length; i++) {
@@ -98,7 +117,8 @@ const Create = () => {
 
 
     //For form validation
-    const handleBlur = (e) => {
+    const handleChange = (e) => {
+        console.log(e.target.name, e.target.value)
         let isFieldValid = true;
         if (e.target.name === "user_name") {
             isFieldValid = /^[A-Za-z]+$/.test(e.target.value);
@@ -118,6 +138,7 @@ const Create = () => {
     var i = 0;
     return (
         <div className="container mt-5">
+            <h3 className="text-center">Create</h3>
             <form onSubmit={handleSubmit}>
 
                 {/* For the field name and field values */}
@@ -126,9 +147,9 @@ const Create = () => {
                         <label>{allField.title}</label>
 
                         <input
-                            onBlur={handleBlur}
+                            onBlur={handleChange}
                             name={fieldName[i++]}
-                            className={allField.html_attr.class && 'form-control'}
+                            className={allField.html_attr.class}
                             data-something="anything, can be some json value too"
                             id={allField.html_attr.id}
                             defaultValue={allField.default}
@@ -143,7 +164,7 @@ const Create = () => {
                 {/* For the Select option for gender */}
                 {selectStatus &&
                     <div>
-                        <select name={select.title} id={select.html_attr.id} className={select.html_attr.class} >
+                        <select onBlur={handleChange} name={select.title} id={select.html_attr.id} className={select.html_attr.class} >
                             {select.options.map(option =>
                                 <option value={option.key}>{option.label}</option>
                             )}
@@ -155,20 +176,21 @@ const Create = () => {
                 {/* For the Radio option for gender */}
                 {radioStatus &&
                     <div>
-                            {radio.options.map(option =>
-                                <>
-                                    <input 
-                                    type={radio.type} 
-                                    id={radio.html_attr.id} 
-                                    className={radio.html_attr.class} 
-                                    name={radio.title} 
-                                    value={option.key} 
-                                    />
+                        {radio.options.map(option =>
+                            <>
+                                <input
+                                    onBlur={handleChange}
+                                    type={radio.type}
+                                    id={radio.html_attr.id}
+                                    className={radio.html_attr.class}
+                                    name={radio.title}
+                                    value={option.key}
+                                />
 
-                                    <label>{option.label}</label>
-                                    <br />
-                                </>
-                            )}
+                                <label>{option.label}</label>
+                                <br />
+                            </>
+                        )}
                     </div>
                 }
 
