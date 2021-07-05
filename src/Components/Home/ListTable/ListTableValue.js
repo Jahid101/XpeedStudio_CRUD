@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const ListTableValue = ({ userInfo }) => {
 
     const { headers, rows } = userInfo;
+    const history = useHistory();
 
     const [tableHeader, setTableHeader] = useState([]);
     // const [tableRows, setTableRow] = useState([]);
@@ -23,6 +25,12 @@ const ListTableValue = ({ userInfo }) => {
     console.log(rows)
 
 
+    const handleOnClick = (id) => {
+        history.push(`/update/${id}`);
+        console.log(`/update/${id}`)
+    }
+
+
     return (
 
         <div className="container">
@@ -41,7 +49,7 @@ const ListTableValue = ({ userInfo }) => {
                     rows.map(row =>
                         <tbody>
                             <tr>
-                                <button className="btn btn-info btn-sm">
+                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm">
                                     <td>{row.id}</td>
                                 </button>
                                 <td>{row.name}</td>
