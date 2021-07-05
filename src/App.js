@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import HomeMain from './Components/Home/HomeMain/HomeMain';
 import Navbar from './Components/Navbar/Navbar';
+import Create from './Components/Create/Create';
 
 
 function App() {
@@ -14,8 +15,11 @@ function App() {
     <Router>
       <Navbar></Navbar>
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <HomeMain></HomeMain>
+        </Route>
+        <Route path="/create">
+          <Create></Create>
         </Route>
       </Switch>
     </Router>

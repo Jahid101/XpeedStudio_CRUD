@@ -4,7 +4,7 @@ import ListTable from '../ListTable/ListTable';
 const HomeMain = () => {
     return (
         <div>
-            <h1>Hi</h1>
+            <h1 className="text-center">Table</h1>
             <ListTable></ListTable>
         </div>
     );

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-const ListTableValue = ({ userHeader }) => {
+const ListTableValue = ({ userInfo }) => {
 
-    const { headers, rows } = userHeader;
+    const { headers, rows } = userInfo;
 
     const [tableHeader, setTableHeader] = useState([]);
-    const [tableRows, setTableRow] = useState([]);
+    // const [tableRows, setTableRow] = useState([]);
 
     // const { id } = userRow;
 
