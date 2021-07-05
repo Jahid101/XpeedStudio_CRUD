@@ -7,6 +7,7 @@ import {
 import HomeMain from './Components/Home/HomeMain/HomeMain';
 import Navbar from './Components/Navbar/Navbar';
 import Create from './Components/Create/Create';
+import Select from './Components/Update/Select';
 
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
         </Route>
         <Route path="/create">
           <Create></Create>
+        </Route>
+        <Route path="/update">
+          <Select></Select>
         </Route>
       </Switch>
     </Router>

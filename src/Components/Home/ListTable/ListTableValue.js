@@ -41,7 +41,9 @@ const ListTableValue = ({ userInfo }) => {
                     rows.map(row =>
                         <tbody>
                             <tr>
-                                <td>{row.id}</td>
+                                <button className="btn btn-info btn-sm">
+                                    <td>{row.id}</td>
+                                </button>
                                 <td>{row.name}</td>
                                 <td>{row.message}</td>
                                 <td>{row.created_at}</td>

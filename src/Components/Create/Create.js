@@ -87,14 +87,11 @@ const Create = () => {
         else {
             alert('Type only letters')
         }
-        if (submitted.status === 'success') {
+        if (submitted.status) {
             for (let i = 0; i < submitted.messages.length; i++) {
                 alert(submitted.messages[i])
             }
             e.target.reset();
-        }
-        else{
-            alert('There is no success message')
         }
     }
 
@@ -131,7 +128,8 @@ const Create = () => {
                         <input
                             onBlur={handleBlur}
                             name={fieldName[i++]}
-                            className={allField.html_attr.class}
+                            className={allField.html_attr.class && 'form-control'}
+                            data-something="anything, can be some json value too"
                             id={allField.html_attr.id}
                             defaultValue={allField.default}
                             placeholder={allField.title}
