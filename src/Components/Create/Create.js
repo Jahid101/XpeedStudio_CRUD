@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 
 const Create = () => {
 
+    //all kinds of hooks
     const [validStatus, setValidStatus] = useState(false);
+    const [selectStatus, setSelectStatus] = useState(false);
+    const [radioStatus, setRadioStatus] = useState(false);
     const [fieldName, setFieldName] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
+    const [radio, setRadio] = useState([]);
     const [submitted, setSubmitted] = useState([]);
     const [allField, setAllField] = useState([]);
-    const [fieldInfo, setFieldInfo] = useState([]);
+    const [select, setSelect] = useState([]);
 
 
-
+    //For fetching the Api data
     useEffect(() => {
         fetch('http://localhost/api/get_form.php')
             .then(res => res.json())
@@ -20,48 +23,84 @@ const Create = () => {
     }, [])
     console.log(userInfo)
 
+
+    //For the name of field
     useEffect(() => {
         var fieldName = Object.keys(userInfo)
         setFieldName(fieldName)
     }, [userInfo])
     console.log(fieldName)
 
+
+    //For the values of field data
     useEffect(() => {
         var fieldData = Object.values(userInfo)
         setAllField(fieldData)
     }, [userInfo])
     console.log(allField)
 
+
+    //For the gender Select option
     useEffect(() => {
-        allField.map(user => setFieldInfo(user))
+        const res = allField.find(allField => allField.type === 'select');
+        console.log(res)
+
+        if (res) {
+            setSelect(res)
+            setSelectStatus(true)
+        }
+        else {
+            setSelectStatus(false)
+        }
+
     }, [allField])
-    console.log(fieldInfo)
+
+
+    //For the gender Radio option
+    useEffect(() => {
+        const radio = allField.find(allField => allField.type === 'radio');
+        console.log(radio)
+
+        if (radio) {
+            setRadio(radio)
+            setRadioStatus(true)
+        }
+        else {
+            setRadioStatus(false)
+        }
+
+    }, [allField])
 
 
 
+
+    //For submitting the form
     const handleSubmit = (e) => {
-        
+
         e.preventDefault();
 
         if (validStatus) {
             fetch('http://localhost/api/submit_form.php')
-            .then(res => res.json())
-            .then(data => setSubmitted(data))
+                .then(res => res.json())
+                .then(data => setSubmitted(data))
         }
         else {
             alert('Type only letters')
         }
-        if(submitted.status === 'success') {
+        if (submitted.status === 'success') {
             for (let i = 0; i < submitted.messages.length; i++) {
                 alert(submitted.messages[i])
             }
             e.target.reset();
         }
+        else{
+            alert('There is no success message')
+        }
     }
-    
-    console.log(submitted.messages)
 
 
+
+    //For form validation
     const handleBlur = (e) => {
         let isFieldValid = true;
         if (e.target.name === "user_name") {
@@ -78,47 +117,66 @@ const Create = () => {
     }
 
 
-    // const { register, handleSubmit } = useForm();
-    // const onSubmit = data => console.log(data);
 
     var i = 0;
-
     return (
         <div className="container mt-5">
             <form onSubmit={handleSubmit}>
 
-                {/* {fieldName.map(fieldName => */}
+                {/* For the field name and field values */}
                 {allField.map(allField =>
                     <div className="form-group">
                         <label>{allField.title}</label>
 
-                        {/* {fieldName.map(fieldName => */}
                         <input
                             onBlur={handleBlur}
                             name={fieldName[i++]}
-                            type={allField.type}
                             className={allField.html_attr.class}
                             id={allField.html_attr.id}
-                            defaultValue={allField.html_attr.data_something}
+                            defaultValue={allField.default}
                             placeholder={allField.title}
                             required={allField.required}
                             validate={allField.validate}
-                        // {...register(fieldName[i++],{ pattern: /^[A-Za-z]+$/i })}
+                            type={allField.type === 'select' ? 'hidden' : allField.type}
                         />
-                        {/* )} */}
-
-                        <br />
-                        {/* )} */}
                     </div>)}
 
-                {/* <div class="form-group">
-                    <label for="formGroupExampleInput2">Another label</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input" />
-                </div> */}
+
+                {/* For the Select option for gender */}
+                {selectStatus &&
+                    <div>
+                        <select name={select.title} id={select.html_attr.id} className={select.html_attr.class} >
+                            {select.options.map(option =>
+                                <option value={option.key}>{option.label}</option>
+                            )}
+                        </select>
+                    </div>
+                }
+
+
+                {/* For the Radio option for gender */}
+                {radioStatus &&
+                    <div>
+                            {radio.options.map(option =>
+                                <>
+                                    <input 
+                                    type={radio.type} 
+                                    id={radio.html_attr.id} 
+                                    className={radio.html_attr.class} 
+                                    name={radio.title} 
+                                    value={option.key} 
+                                    />
+
+                                    <label>{option.label}</label>
+                                    <br />
+                                </>
+                            )}
+                    </div>
+                }
 
                 <br />
                 <input className="btn btn-success mb-3" type="submit" value="Submit" />
-                
+
             </form>
         </div>
     );
