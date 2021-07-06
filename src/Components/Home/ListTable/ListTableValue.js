@@ -8,9 +8,14 @@ const ListTableValue = ({ userInfo }) => {
 
     const [tableHeader, setTableHeader] = useState([]);
     const [searchable, setSearchable] = useState([]);
-    const [searchId, setSearchId] = useState([]);
+    const [searchValue, setSearchValue] = useState([]);
     const [searchById, setSearchById] = useState([]);
     const [searchByIdStatus, setSearchByIdStatus] = useState(false);
+    const [searchByName, setSearchByName] = useState([]);
+    const [searchByNameStatus, setSearchByNameStatus] = useState(false);
+    const [searchByDate, setSearchByDate] = useState([]);
+    const [searchByDateStatus, setSearchByDateStatus] = useState(false);
+    const [allDataShowStatus, setAllDataShowStatus] = useState(true);
 
     // const [tableRows, setTableRow] = useState([]);
 
@@ -51,14 +56,45 @@ const ListTableValue = ({ userInfo }) => {
     }
 
 
-    const handleOnChange = (e) => {
-        setSearchId(e.target.value)
+    const handleOnBlur = (e) => {
+        setSearchValue(e.target.value)
     }
 
-    const handleSearchClick = () => {
-        const searchById = rows.filter(row => row.id == searchId)
-        setSearchById(searchById)
-        setSearchByIdStatus(true)
+
+    const handleSearchClick = (title) => {
+        if (title === 'ID') {
+            const search = rows.filter(row => row.id == searchValue)
+            setSearchById(search)
+            setSearchByIdStatus(true)
+            setSearchByNameStatus(false)
+            setSearchByDateStatus(false)
+            setAllDataShowStatus(false)
+            console.log('id')
+        }
+        if (title === 'Name') {
+            const search = rows.filter(row => row.name == searchValue)
+            setSearchByName(search)
+            setSearchByNameStatus(true)
+            setSearchByIdStatus(false)
+            setSearchByDateStatus(false)
+            setAllDataShowStatus(false)
+        }
+        if (title === 'Submision Date') {
+            const search = rows.filter(row => row.created_at == searchValue)
+            setSearchByDate(search)
+            setSearchByDateStatus(true)
+            setSearchByNameStatus(false)
+            setSearchByIdStatus(false)
+            setAllDataShowStatus(false)
+        }
+    }
+
+
+    const handleClickShowAllButton = () => {
+        setAllDataShowStatus(true)
+        setSearchByDateStatus(false)
+        setSearchByNameStatus(false)
+        setSearchByIdStatus(false)
     }
 
 
@@ -66,15 +102,17 @@ const ListTableValue = ({ userInfo }) => {
     return (
 
         <div className="container mt-3">
+            {!allDataShowStatus && <button onClick={handleClickShowAllButton} style={{ marginLeft: '91%' }} className="btn btn-info">Show all</button>}
+            <br />
 
             {searchable.map(search =>
                 <>
-                    <input className="ms-5 mb-3" placeholder={search.title} onChange={handleOnChange} type="search" name="" id="" />
-                    <button onClick={handleSearchClick} className="btn btn-primary btn-mid">{search.title}</button>
+                    <input className="ms-5 mb-3" placeholder={search.title} onBlur={handleOnBlur} type="search" name="" id="" />
+                    <button onClick={() => handleSearchClick(search.title)} className="btn btn-primary btn-mid">{search.title}</button>
                 </>
             )}
 
-            <table className="table">
+            {allDataShowStatus ? <table className="table">
                 <thead>
                     <tr>
                         {
@@ -97,7 +135,7 @@ const ListTableValue = ({ userInfo }) => {
                             </tr>
                         </tbody>
                     )}
-            </table>
+            </table> : ''}
 
 
             {/* Search By ID */}
@@ -126,6 +164,61 @@ const ListTableValue = ({ userInfo }) => {
                     )}
             </table>}
 
+
+
+            {/* Search By Name */}
+            {searchByNameStatus && <table className="table">
+                <thead>
+                    <tr>
+                        {
+                            tableHeader.map(tableHeader =>
+                                <th scope="col">{tableHeader.title}</th>
+                            )}
+                    </tr>
+                </thead>
+
+                {
+                    searchByName.map(row =>
+                        <tbody>
+                            <tr>
+                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
+                                    <td>{row.id}</td>
+                                </button>
+                                <td>{row.name}</td>
+                                <td>{row.message}</td>
+                                <td>{row.created_at}</td>
+                            </tr>
+                        </tbody>
+                    )}
+            </table>}
+
+
+
+            {/* Search By Submission Date */}
+            {searchByDateStatus && <table className="table">
+                <thead>
+                    <tr>
+                        {
+                            tableHeader.map(tableHeader =>
+                                <th scope="col">{tableHeader.title}</th>
+                            )}
+                    </tr>
+                </thead>
+
+                {
+                    searchByDate.map(row =>
+                        <tbody>
+                            <tr>
+                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
+                                    <td>{row.id}</td>
+                                </button>
+                                <td>{row.name}</td>
+                                <td>{row.message}</td>
+                                <td>{row.created_at}</td>
+                            </tr>
+                        </tbody>
+                    )}
+            </table>}
 
 
         </div>
