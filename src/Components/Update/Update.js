@@ -74,17 +74,18 @@ const Update = () => {
 
 
 
-    //For submitting the form
+    //For updating the data
     const handleSubmit = (e) => {
 
         e.preventDefault();
 
         //updating data
         const UpdateInfo = {
-            user_name: e.target.user_name.value || '',
-            user_email: e.target.user_email.value || '',
-            user_gender: e.target.user_gender.value || '',
-            details: e.target.details.value || ''
+
+            user_name: e.target.user_name.value || ''
+            // user_email: e.target.user_email.value || '',
+            // user_gender: e.target.user_gender.value || '',
+            // details: e.target.details.value || ''
         };
         console.log(UpdateInfo)
 
@@ -143,23 +144,46 @@ const Update = () => {
             <form onSubmit={handleSubmit}>
 
                 {/* For the field name and field values */}
-                {allField.map(allField =>
-                    <div className="form-group">
-                        <label>{allField.title}</label>
+                {!radioStatus && <>
+                    {allField.map(allField =>
+                        <div className="form-group">
+                            <label>{allField.title}</label>
 
-                        <input
-                            onBlur={handleBlur}
-                            name={fieldName[i++]}
-                            className={allField.html_attr.class}
-                            data-something="anything, can be some json value too"
-                            id={allField.html_attr.id}
-                            defaultValue={allField.default}
-                            placeholder={allField.title}
-                            required={allField.required}
-                            validate={allField.validate}
-                            type={allField.type === 'select' ? 'hidden' : allField.type}
-                        />
-                    </div>)}
+                            <input
+                                onBlur={handleBlur}
+                                name={fieldName[i++]}
+                                className={allField.html_attr.class}
+                                data-something="anything, can be some json value too"
+                                id={allField.html_attr.id}
+                                defaultValue={allField.default}
+                                placeholder={allField.title}
+                                required={allField.required}
+                                type={allField.type === 'select' ? 'hidden' : allField.type}
+                            />
+                        </div>)}
+                </>}
+
+
+
+                {/* For the field name and field values for radio type*/}
+                {radioStatus && <>
+                    {allField.map(allField =>
+                        <div className="form-group">
+                            <label>{allField.title}</label>
+
+                            <input
+                                onBlur={handleBlur}
+                                name="user_gender"
+                                className={allField.html_attr.class}
+                                data-something="anything, can be some json value too"
+                                id={allField.html_attr.id}
+                                defaultValue={allField.default}
+                                placeholder={allField.title}
+                                required={allField.required}
+                                type={allField.type === 'radio' ? 'hidden' : allField.type}
+                            />
+                        </div>)}
+                </>}
 
 
                 {/* For the Select option for gender */}
@@ -180,11 +204,13 @@ const Update = () => {
                         {radio.options.map(option =>
                             <>
                                 <input
+                                    onBlur={handleBlur}
                                     type={radio.type}
                                     id={radio.html_attr.id}
                                     className={radio.html_attr.class}
-                                    name={radio.title}
+                                    name="user_gender"
                                     value={option.key}
+                                    required
                                 />
 
                                 <label>{option.label}</label>

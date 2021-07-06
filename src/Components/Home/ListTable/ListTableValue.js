@@ -7,6 +7,7 @@ const ListTableValue = ({ userInfo }) => {
     const history = useHistory();
 
     const [tableHeader, setTableHeader] = useState([]);
+    const [tableRows, setTableRows] = useState([]);
     const [searchable, setSearchable] = useState([]);
     const [searchValue, setSearchValue] = useState([]);
     const [searchById, setSearchById] = useState([]);
@@ -47,6 +48,18 @@ const ListTableValue = ({ userInfo }) => {
     //     )
     // }, [rows])
 
+    var abc = [];
+    useEffect(() => {
+        for (let i = 0; i < rows.length; i++) {
+
+            var columnName = Object.keys(rows[i])
+            // abc.push(columnName)
+            setTableRows(columnName)
+            console.log(columnName)
+        }
+    }, [])
+    console.log(abc)
+    console.log(tableRows)
     console.log(rows)
 
 
@@ -122,19 +135,30 @@ const ListTableValue = ({ userInfo }) => {
                     </tr>
                 </thead>
 
-                {
-                    rows.map(row =>
-                        <tbody>
-                            <tr>
-                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
-                                    <td>{row.id}</td>
-                                </button>
-                                <td>{row.name}</td>
-                                <td>{row.message}</td>
-                                <td>{row.created_at}</td>
-                            </tr>
-                        </tbody>
-                    )}
+                {rows.map(row =>
+                    <tbody>
+                        <tr>
+                            <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
+                                <td>{row.id}</td>
+                            </button>
+                            <td>{row.name}</td>
+                            <td>{row.message}</td>
+                            <td>{row.created_at}</td>
+                            <td>{row.extra_junk_field}</td>
+                        </tr>
+                    </tbody>
+                )}
+
+
+
+                {/* <tbody>
+                    <tr>
+                        {rows.map(row =>
+                            <td>{row[1]}</td>
+                        )}
+                    </tr>
+                </tbody> */}
+
             </table> : ''}
 
 
@@ -159,6 +183,7 @@ const ListTableValue = ({ userInfo }) => {
                                 <td>{row.name}</td>
                                 <td>{row.message}</td>
                                 <td>{row.created_at}</td>
+                                <td>{row.extra_junk_field}</td>
                             </tr>
                         </tbody>
                     )}
@@ -187,6 +212,7 @@ const ListTableValue = ({ userInfo }) => {
                                 <td>{row.name}</td>
                                 <td>{row.message}</td>
                                 <td>{row.created_at}</td>
+                                <td>{row.extra_junk_field}</td>
                             </tr>
                         </tbody>
                     )}
@@ -215,6 +241,7 @@ const ListTableValue = ({ userInfo }) => {
                                 <td>{row.name}</td>
                                 <td>{row.message}</td>
                                 <td>{row.created_at}</td>
+                                <td>{row.extra_junk_field}</td>
                             </tr>
                         </tbody>
                     )}

@@ -81,10 +81,10 @@ const Create = () => {
 
         //Sending data
         const CreateInfo = {
-            user_name: e.target.user_name.value || '',
-            user_email: e.target.user_email.value || '',
-            user_gender: e.target.user_gender.value || '',
-            details: e.target.details.value || ''
+            user_name: e.target.user_name.value || ''
+            // user_email: e.target.user_email.value || '',
+            // user_gender: e.target.user_gender.value || 'male',
+            // details: e.target.details.value || ''
         };
         console.log(CreateInfo)
 
@@ -117,7 +117,7 @@ const Create = () => {
 
 
     //For form validation
-    const handleChange = (e) => {
+    const handleBlur = (e) => {
         console.log(e.target.name, e.target.value)
         let isFieldValid = true;
         if (e.target.name === "user_name") {
@@ -141,30 +141,52 @@ const Create = () => {
             <h3 className="text-center">Create</h3>
             <form onSubmit={handleSubmit}>
 
-                {/* For the field name and field values */}
-                {allField.map(allField =>
-                    <div className="form-group">
-                        <label>{allField.title}</label>
+                {/* For the field name and field values for select type*/}
+                {!radioStatus && <>
+                    {allField.map(allField =>
+                        <div className="form-group">
+                            <label>{allField.title}</label>
 
-                        <input
-                            onBlur={handleChange}
-                            name={fieldName[i++]}
-                            className={allField.html_attr.class}
-                            data-something="anything, can be some json value too"
-                            id={allField.html_attr.id}
-                            defaultValue={allField.default}
-                            placeholder={allField.title}
-                            required={allField.required}
-                            validate={allField.validate}
-                            type={allField.type === 'select' ? 'hidden' : allField.type}
-                        />
-                    </div>)}
+                            <input
+                                onBlur={handleBlur}
+                                name={fieldName[i++]}
+                                className={allField.html_attr.class}
+                                data-something="anything, can be some json value too"
+                                id={allField.html_attr.id}
+                                defaultValue={allField.default}
+                                placeholder={allField.title}
+                                required={allField.required}
+                                type={allField.type === 'select' ? 'hidden' : allField.type}
+                            />
+                        </div>)}
+                </>}
+
+
+                {/* For the field name and field values for radio type*/}
+                {radioStatus && <>
+                    {allField.map(allField =>
+                        <div className="form-group">
+                            <label>{allField.title}</label>
+
+                            <input
+                                onBlur={handleBlur}
+                                name="user_gender"
+                                className={allField.html_attr.class}
+                                data-something="anything, can be some json value too"
+                                id={allField.html_attr.id}
+                                defaultValue={allField.default}
+                                placeholder={allField.title}
+                                required={allField.required}
+                                type={allField.type === 'radio' ? 'hidden' : allField.type}
+                            />
+                        </div>)}
+                </>}
 
 
                 {/* For the Select option for gender */}
                 {selectStatus &&
                     <div>
-                        <select onBlur={handleChange} name={select.title} id={select.html_attr.id} className={select.html_attr.class} >
+                        <select onBlur={handleBlur} name={select.title} id={select.html_attr.id} className={select.html_attr.class} >
                             {select.options.map(option =>
                                 <option value={option.key}>{option.label}</option>
                             )}
@@ -179,12 +201,13 @@ const Create = () => {
                         {radio.options.map(option =>
                             <>
                                 <input
-                                    onBlur={handleChange}
+                                    onBlur={handleBlur}
                                     type={radio.type}
                                     id={radio.html_attr.id}
                                     className={radio.html_attr.class}
-                                    name={radio.title}
+                                    name="user_gender"
                                     value={option.key}
+                                    required
                                 />
 
                                 <label>{option.label}</label>
