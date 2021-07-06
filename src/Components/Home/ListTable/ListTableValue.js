@@ -48,18 +48,18 @@ const ListTableValue = ({ userInfo }) => {
     //     )
     // }, [rows])
 
-    var abc = [];
-    useEffect(() => {
-        for (let i = 0; i < rows.length; i++) {
+    // var abc = [];
+    // useEffect(() => {
+    //     for (let i = 0; i < rows.length; i++) {
 
-            var columnName = Object.keys(rows[i])
-            // abc.push(columnName)
-            setTableRows(columnName)
-            console.log(columnName)
-        }
-    }, [])
-    console.log(abc)
-    console.log(tableRows)
+    //         var columnName = Object.keys(rows[i])
+    //         // abc.push(columnName)
+    //         setTableRows(columnName)
+    //         console.log(columnName)
+    //     }
+    // }, [])
+    // console.log(abc)
+    // console.log(tableRows)
     console.log(rows)
 
 

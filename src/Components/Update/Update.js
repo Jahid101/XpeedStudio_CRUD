@@ -6,6 +6,10 @@ const Update = () => {
     const [validStatus, setValidStatus] = useState(false);
     const [selectStatus, setSelectStatus] = useState(false);
     const [radioStatus, setRadioStatus] = useState(false);
+    const [repeaterStatus, setRepeaterStatus] = useState(false);
+    const [repeater, setRepeater] = useState([]);
+    const [repeaterOption, setRepeaterOption] = useState([]);
+    const [repeaterOptionValues, setRepeaterOptionValues] = useState([]);
     const [fieldName, setFieldName] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     const [radio, setRadio] = useState([]);
@@ -22,6 +26,7 @@ const Update = () => {
             .then(data => setUserInfo(data.data.fields[0]))
     }, [id])
     console.log(userInfo)
+    console.log(Object.values(userInfo))
 
 
     //For the name of field
@@ -38,6 +43,16 @@ const Update = () => {
         setAllField(fieldData)
     }, [userInfo])
     console.log(allField)
+
+
+    ///////////////////////////////////////////////////
+    useEffect(() => {
+        repeater.map(repeater => setRepeaterOption(Object.values(repeater)[2]))
+
+        var data = Object.values(repeaterOption)
+        setRepeaterOptionValues(data)
+    }, [repeater, repeaterOption])
+    console.log(repeaterOption)
 
 
     //For the gender Select option
@@ -72,6 +87,24 @@ const Update = () => {
     }, [allField])
 
 
+    //For the work type Repeater
+    useEffect(() => {
+        const repeater = allField.filter(allField => allField.type === 'repeater');
+        console.log(repeater)
+        const repeater2 = allField.find(allField => allField.type === 'repeater');
+
+        if (repeater2) {
+            setRepeater(repeater)
+            setRepeaterStatus(true)
+        }
+        else {
+            setRepeaterStatus(false)
+        }
+
+    }, [allField])
+    console.log(repeater)
+
+
 
 
     //For updating the data
@@ -82,7 +115,7 @@ const Update = () => {
         //updating data
         const UpdateInfo = {
 
-            user_name: e.target.user_name.value || ''
+            // user_name: e.target.user_name.value || ''
             // user_email: e.target.user_email.value || '',
             // user_gender: e.target.user_gender.value || '',
             // details: e.target.details.value || ''
@@ -121,7 +154,7 @@ const Update = () => {
     const handleBlur = (e) => {
         let isFieldValid = true;
         if (e.target.name === "user_name") {
-            isFieldValid = /^[A-Za-z]+$/.test(e.target.value);
+            isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);
         }
         if (isFieldValid) {
             setValidStatus(true)
@@ -134,9 +167,15 @@ const Update = () => {
     }
 
 
+    //For work repeating option
+    const handleWorkButton = () => {
+        console.log('object')
+    }
+
+
+
 
     var i = 0;
-
     return (
         <div className="container mt-5">
             <h3 className="text-center">Update</h3>
@@ -145,45 +184,80 @@ const Update = () => {
 
                 {/* For the field name and field values */}
                 {!radioStatus && <>
-                    {allField.map(allField =>
-                        <div className="form-group">
-                            <label>{allField.title}</label>
+                    {!repeaterStatus && <>
+                        {allField.map(allField =>
+                            <div className="form-group">
+                                <label>{allField.title}</label>
 
-                            <input
-                                onBlur={handleBlur}
-                                name={fieldName[i++]}
-                                className={allField.html_attr.class}
-                                data-something="anything, can be some json value too"
-                                id={allField.html_attr.id}
-                                defaultValue={allField.default}
-                                placeholder={allField.title}
-                                required={allField.required}
-                                type={allField.type === 'select' ? 'hidden' : allField.type}
-                            />
-                        </div>)}
+                                <input
+                                    onBlur={handleBlur}
+                                    autoFocus
+                                    name={fieldName[i++]}
+                                    className={allField.html_attr.class}
+                                    data-something="anything, can be some json value too"
+                                    id={allField.html_attr.id}
+                                    defaultValue={allField.value}
+                                    placeholder={allField.title}
+                                    required={allField.required}
+                                    type={allField.type === 'select' ? 'hidden' : allField.type}
+                                />
+                            </div>)}
+                    </>}
                 </>}
 
 
 
                 {/* For the field name and field values for radio type*/}
-                {radioStatus && <>
+                {!repeaterStatus && <>
+                    {radioStatus && <>
+                        {allField.map(allField =>
+                            <div className="form-group">
+                                <label>{allField.title}</label>
+
+                                <input
+                                    autoFocus
+                                    onBlur={handleBlur}
+                                    name="user_gender"
+                                    className={allField.html_attr.class}
+                                    data-something="anything, can be some json value too"
+                                    id={allField.html_attr.id}
+                                    defaultValue={allField.value}
+                                    placeholder={allField.title}
+                                    required={allField.required}
+                                    type={allField.type === 'radio' ? 'hidden' : allField.type}
+                                />
+                            </div>)}
+                    </>}
+                </>}
+
+
+
+                {/* For the field name and field values for repeater type*/}
+                {repeaterStatus && <>
+
                     {allField.map(allField =>
                         <div className="form-group">
                             <label>{allField.title}</label>
 
                             <input
                                 onBlur={handleBlur}
-                                name="user_gender"
+                                autoFocus
+                                name="user_hobby"
                                 className={allField.html_attr.class}
                                 data-something="anything, can be some json value too"
                                 id={allField.html_attr.id}
-                                defaultValue={allField.default}
+                                defaultValue={allField.value}
                                 placeholder={allField.title}
                                 required={allField.required}
-                                type={allField.type === 'radio' ? 'hidden' : allField.type}
+                                type={allField.type === 'repeater' ? 'hidden' : allField.type}
                             />
+
                         </div>)}
+
+                    <p onClick={handleWorkButton} className="btn bg-info">Work +</p>
+
                 </>}
+
 
 
                 {/* For the Select option for gender */}
@@ -204,10 +278,12 @@ const Update = () => {
                         {radio.options.map(option =>
                             <>
                                 <input
+                                    autoFocus
                                     onBlur={handleBlur}
                                     type={radio.type}
                                     id={radio.html_attr.id}
                                     className={radio.html_attr.class}
+                                    defaultValue={allField.value}
                                     name="user_gender"
                                     value={option.key}
                                     required
@@ -219,6 +295,51 @@ const Update = () => {
                         )}
                     </div>
                 }
+
+
+                {/* For work values */}
+                {repeaterStatus && <>
+
+                    {repeater[0].value.map(allField =>
+                        <div className="form-group">
+                            <label>designation</label>
+                            <input
+                                onBlur={handleBlur}
+                                autoFocus
+                                defaultValue={allField.designation}
+                            />
+
+                            <label>work_place</label>
+                            <input
+                                onBlur={handleBlur}
+                                autoFocus
+                                defaultValue={allField.work_place}
+                            />
+
+                        </div>)}
+                </>}
+
+
+
+                {/* For work repeater options  */}
+                {repeaterStatus && <>
+
+                    {repeaterOptionValues.map(allField =>
+                        <div className="form-group">
+                            <br />
+                            <label>{allField.title}</label>
+                            <input
+                                onBlur={handleBlur}
+                                autoFocus
+                                type={allField.type}
+                                placeholder={allField.title}
+                                required={allField.required}
+                            />
+
+                        </div>
+                    )}
+                </>}
+
 
                 <br />
                 <input className="btn btn-success mb-3" type="submit" value="Submit" />
