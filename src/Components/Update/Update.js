@@ -7,6 +7,7 @@ const Update = () => {
     const [selectStatus, setSelectStatus] = useState(false);
     const [radioStatus, setRadioStatus] = useState(false);
     const [repeaterStatus, setRepeaterStatus] = useState(false);
+    const [showRepeaterOption, setShowRepeaterOption] = useState(false);
     const [repeater, setRepeater] = useState([]);
     const [repeaterOption, setRepeaterOption] = useState([]);
     const [repeaterOptionValues, setRepeaterOptionValues] = useState([]);
@@ -169,8 +170,18 @@ const Update = () => {
 
     //For work repeating option
     const handleWorkButton = () => {
-        console.log('object')
+        setShowRepeaterOption(true)
+        console.log('asdas')
     }
+
+
+    //For work repeating option
+    const handleWorkPlusButton = () => {
+
+        document.getElementById('repeat2').innerHTML = document.getElementById('repeat1').innerHTML;
+
+    }
+
 
 
 
@@ -322,24 +333,36 @@ const Update = () => {
 
 
                 {/* For work repeater options  */}
-                {repeaterStatus && <>
+                {showRepeaterOption && <>
+                    {repeaterStatus && <>
+                        <br />
 
-                    {repeaterOptionValues.map(allField =>
-                        <div className="form-group">
-                            <br />
-                            <label>{allField.title}</label>
-                            <input
-                                onBlur={handleBlur}
-                                autoFocus
-                                type={allField.type}
-                                placeholder={allField.title}
-                                required={allField.required}
-                            />
+                        <p onClick={handleWorkPlusButton} className="btn bg-info"> + </p>
 
+                        <div id="repeat1">
+
+                            {repeaterOptionValues.map(allField =>
+                                <div className="form-group">
+                                    <br />
+                                    <label>{allField.title}</label>
+                                    <input
+                                        onBlur={handleBlur}
+                                        autoFocus
+                                        type={allField.type}
+                                        placeholder={allField.title}
+                                        required={allField.required}
+                                    />
+                                </div>
+
+                            )}
                         </div>
-                    )}
+                        <hr />
+                    </>}
                 </>}
 
+                <div id="repeat2">
+
+                </div>
 
                 <br />
                 <input className="btn btn-success mb-3" type="submit" value="Submit" />

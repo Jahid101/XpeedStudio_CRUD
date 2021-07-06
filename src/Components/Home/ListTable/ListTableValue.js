@@ -7,7 +7,6 @@ const ListTableValue = ({ userInfo }) => {
     const history = useHistory();
 
     const [tableHeader, setTableHeader] = useState([]);
-    const [tableRows, setTableRows] = useState([]);
     const [searchable, setSearchable] = useState([]);
     const [searchValue, setSearchValue] = useState([]);
     const [searchById, setSearchById] = useState([]);
