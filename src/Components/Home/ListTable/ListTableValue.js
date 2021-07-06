@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const ListTableValue = ({ userInfo }) => {
 
@@ -110,6 +111,10 @@ const ListTableValue = ({ userInfo }) => {
     }
 
 
+    const onEnd = (result) => {
+        console.log(result)
+    }
+
 
     return (
 
@@ -124,41 +129,65 @@ const ListTableValue = ({ userInfo }) => {
                 </>
             )}
 
-            {allDataShowStatus ? <table className="table">
-                <thead>
-                    <tr>
-                        {
-                            tableHeader.map(tableHeader =>
-                                <th scope="col">{tableHeader.title}</th>
-                            )}
-                    </tr>
-                </thead>
 
-                {rows.map(row =>
-                    <tbody>
+            {allDataShowStatus ?
+
+                <table className="table">
+                    <thead>
                         <tr>
-                            <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
-                                <td>{row.id}</td>
-                            </button>
-                            <td>{row.name}</td>
-                            <td>{row.message}</td>
-                            <td>{row.created_at}</td>
-                            <td>{row.extra_junk_field}</td>
+                            {
+                                tableHeader.map(tableHeader =>
+                                    <th scope="col">{tableHeader.title}</th>
+                                )}
                         </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {/* <DragDropContext onDragEnd={onEnd}>
+                            <Droppable droppableId="123456789"
+                            >
+                                {(provided, snapshot) = (
+                                    <div ref={provided.innerRef}> */}
+
+
+
+                                        {rows.map((row, index) =>
+                                            // <Draggable
+                                            //     draggableId={row.id}
+                                            //     key={row.id}
+                                            //     index={index}
+                                            // >
+                                            //     {(provided, snapshot) => (
+                                            //         <div
+                                            //             ref={provided.innerRef}
+                                            //             {...provided.draggableProps}
+                                            //             {...provided.dragHandleProps}
+                                            //         >
+                                                        <tr>
+                                                            <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
+                                                                <td>{row.id}</td>
+                                                            </button>
+                                                            <td>{row.name}</td>
+                                                            <td>{row.message}</td>
+                                                            <td>{row.created_at}</td>
+                                                            <td>{row.extra_junk_field}</td>
+                                                        </tr>
+                                                    // </div>
+                                                )}
+                                            {/* </Draggable> */}
+                                        {/* )}
+
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext> */}
                     </tbody>
-                )}
 
 
+                </table>
 
-                {/* <tbody>
-                    <tr>
-                        {rows.map(row =>
-                            <td>{row[1]}</td>
-                        )}
-                    </tr>
-                </tbody> */}
-
-            </table> : ''}
+                : ''}
 
 
             {/* Search By ID */}
