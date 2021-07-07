@@ -46,7 +46,7 @@ const Update = () => {
     console.log(allField)
 
 
-    ///////////////////////////////////////////////////
+    // For Repeater Fields
     useEffect(() => {
         repeater.map(repeater => setRepeaterOption(Object.values(repeater)[2]))
 
@@ -157,6 +157,7 @@ const Update = () => {
         if (e.target.name === "user_name") {
             isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);
         }
+        
         if (isFieldValid) {
             setValidStatus(true)
         }
@@ -165,6 +166,7 @@ const Update = () => {
             alert("Type only letters")
             e.target.value = '';
         }
+
     }
 
 
@@ -356,7 +358,7 @@ const Update = () => {
 
                             )}<hr />
                         </div>
-                        
+
                     </>}
                 </>}
 

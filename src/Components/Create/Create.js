@@ -81,7 +81,7 @@ const Create = () => {
 
         //Sending data
         const CreateInfo = {
-            user_name: e.target.user_name.value || ''
+            // user_name: e.target.user_name.value || ''
             // user_email: e.target.user_email.value || '',
             // user_gender: e.target.user_gender.value || 'male',
             // details: e.target.details.value || ''
@@ -121,8 +121,9 @@ const Create = () => {
         console.log(e.target.name, e.target.value)
         let isFieldValid = true;
         if (e.target.name === "user_name") {
-            isFieldValid = /^[A-Za-z]+$/.test(e.target.value);
+            isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);
         }
+
         if (isFieldValid) {
             setValidStatus(true)
         }
