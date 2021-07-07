@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import spin from '../../images/spinner.gif';
 
 
 const Create = () => {
@@ -7,6 +8,7 @@ const Create = () => {
     const [validStatus, setValidStatus] = useState(false);
     const [selectStatus, setSelectStatus] = useState(false);
     const [radioStatus, setRadioStatus] = useState(false);
+    const [spinner, setSpinner] = useState(false);
     const [fieldName, setFieldName] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     const [radio, setRadio] = useState([]);
@@ -73,6 +75,12 @@ const Create = () => {
     }, [allField])
 
 
+    //Getting success messages
+    useEffect(() => {
+        fetch('http://localhost/api/submit_form.php')
+            .then(res => res.json())
+            .then(data => setSubmitted(data))
+    }, [])
 
 
     //For submitting the form
@@ -99,20 +107,17 @@ const Create = () => {
                 },
                 body: JSON.stringify(CreateInfo)
             })
+            setSpinner(true);
         }
 
 
         //Showing success messages
-        if (validStatus) {
-            fetch('http://localhost/api/submit_form.php')
-                .then(res => res.json())
-                .then(data => setSubmitted(data))
-        }
-        if (submitted.status) {
+       if (submitted.status) {
             for (let i = 0; i < submitted.messages.length; i++) {
-                alert(submitted.messages[i])
+                setTimeout(function(){ alert(submitted.messages[i]); }, 1000);
             }
             e.target.reset();
+            setTimeout(function(){ setSpinner(false); }, 1000)
         }
     }
 
@@ -135,6 +140,8 @@ const Create = () => {
             e.target.value = '';
         }
     }
+
+
 
 
 
@@ -221,10 +228,15 @@ const Create = () => {
                 }
 
                 <br />
-                <input className="btn btn-success mb-3" type="submit" value="Submit" />
+
+                {!spinner ?
+                <input className="btn btn-success mb-5" type="submit" value="Submit" />
+                :
+                <img style={{ height: '100px' }} src={spin} alt="" />
+                }
 
             </form>
-        </div>
+        </div >
     );
 };
 

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import spin from '../../images/spinner.gif';
 import { useParams } from 'react-router-dom';
 
 const Update = () => {
 
     const [validStatus, setValidStatus] = useState(false);
+    const [spinner, setSpinner] = useState(false);
     const [selectStatus, setSelectStatus] = useState(false);
     const [radioStatus, setRadioStatus] = useState(false);
     const [repeaterStatus, setRepeaterStatus] = useState(false);
@@ -107,6 +109,12 @@ const Update = () => {
     console.log(repeater)
 
 
+    //Getting success messages
+    useEffect(() => {
+        fetch('http://localhost/api/submit_form.php')
+            .then(res => res.json())
+            .then(data => setSubmitted(data))
+    }, [])
 
 
     //For updating the data
@@ -122,7 +130,6 @@ const Update = () => {
             // user_gender: e.target.user_gender.value || '',
             // details: e.target.details.value || ''
         };
-        console.log(UpdateInfo)
 
         if (validStatus) {
             const url = `http://localhost/api/submit_form.php`;
@@ -133,20 +140,17 @@ const Update = () => {
                 },
                 body: JSON.stringify(UpdateInfo)
             })
+            setSpinner(true)
         }
 
 
-        //showing success messages
-        if (validStatus) {
-            fetch('http://localhost/api/submit_form.php')
-                .then(res => res.json())
-                .then(data => setSubmitted(data))
-        }
+        //Showing success messages
         if (submitted.status) {
             for (let i = 0; i < submitted.messages.length; i++) {
-                alert(submitted.messages[i])
+                setTimeout(function () { alert(submitted.messages[i]); }, 1000);
             }
             e.target.reset();
+            setTimeout(function () { setSpinner(false); }, 1000)
         }
     }
 
@@ -159,7 +163,7 @@ const Update = () => {
         if (e.target.name === "user_name") {
             isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);
         }
-        
+
         if (isFieldValid) {
             setValidStatus(true)
         }
@@ -380,7 +384,12 @@ const Update = () => {
                 <div id="repeat15"></div>
 
                 <br />
-                <input className="btn btn-success mb-3" type="submit" value="Submit" />
+
+                {!spinner ?
+                    <input className="btn btn-success mb-5" type="submit" value="Submit" />
+                    :
+                    <img style={{ height: '100px' }} src={spin} alt="" />
+                }
 
             </form>
         </div>
