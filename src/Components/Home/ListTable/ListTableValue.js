@@ -8,6 +8,8 @@ const ListTableValue = ({ userInfo }) => {
     const history = useHistory();
 
     const [tableHeader, setTableHeader] = useState([]);
+    const [hidden, setHidden] = useState([]);
+    const [row, setRow] = useState([]);
     const [searchable, setSearchable] = useState([]);
     const [searchValue, setSearchValue] = useState([]);
     const [searchById, setSearchById] = useState([]);
@@ -18,14 +20,6 @@ const ListTableValue = ({ userInfo }) => {
     const [searchByDateStatus, setSearchByDateStatus] = useState(false);
     const [allDataShowStatus, setAllDataShowStatus] = useState(true);
 
-    // const [tableRows, setTableRow] = useState([]);
-
-    // const { id } = userRow;
-
-    // useEffect(() => {
-    //     var columnNames = Object.keys(headers[0])
-    //     setTableHeader2(columnNames)
-    // }, [headers])
 
     useEffect(() => {
         var columnName = Object.values(headers[0])
@@ -35,37 +29,32 @@ const ListTableValue = ({ userInfo }) => {
 
 
     useEffect(() => {
-        let search = tableHeader.filter(tableHeader => tableHeader.searchable === true)
+        let hidden = tableHeader.filter(tableHeader => tableHeader.hidden === false)
+
+        setHidden(hidden);
+    }, [tableHeader])
+    console.log(hidden)
+
+
+    useEffect(() => {
+        let search = hidden.filter(hidden => hidden.searchable === true)
 
         setSearchable(search);
-    }, [tableHeader])
+    }, [hidden])
     console.log(searchable)
 
 
     // useEffect(() => {
-    //     rows.map(row =>
-    //         setTableRow(row)
-    //     )
+    //     var columnName = Object.values(rows)
+    //     columnName.map(column =>setRow(column))
+    //     // setRow(columnName)
     // }, [rows])
 
-    // var abc = [];
-    // useEffect(() => {
-    //     for (let i = 0; i < rows.length; i++) {
-
-    //         var columnName = Object.keys(rows[i])
-    //         // abc.push(columnName)
-    //         setTableRows(columnName)
-    //         console.log(columnName)
-    //     }
-    // }, [])
-    // console.log(abc)
-    // console.log(tableRows)
     console.log(rows)
 
 
     const handleOnClick = (id) => {
-        history.push(`/update/${id}`);
-        console.log(`/update/${id}`)
+        history.push(`/update/${id}`)
     }
 
 
@@ -75,6 +64,7 @@ const ListTableValue = ({ userInfo }) => {
 
 
     const handleSearchClick = (title) => {
+        
         if (title === 'ID') {
             const search = rows.filter(row => row.id == searchValue)
             setSearchById(search)
@@ -82,7 +72,6 @@ const ListTableValue = ({ userInfo }) => {
             setSearchByNameStatus(false)
             setSearchByDateStatus(false)
             setAllDataShowStatus(false)
-            console.log('id')
         }
         if (title === 'Name') {
             const search = rows.filter(row => row.name == searchValue)
@@ -136,8 +125,8 @@ const ListTableValue = ({ userInfo }) => {
                     <thead>
                         <tr>
                             {
-                                tableHeader.map(tableHeader =>
-                                    <th scope="col">{tableHeader.title}</th>
+                                hidden.map(hidden =>
+                                    <th scope="col">{hidden.title}</th>
                                 )}
                         </tr>
                     </thead>
@@ -152,31 +141,32 @@ const ListTableValue = ({ userInfo }) => {
 
 
 
-                                        {rows.map((row, index) =>
-                                            // <Draggable
-                                            //     draggableId={row.id}
-                                            //     key={row.id}
-                                            //     index={index}
-                                            // >
-                                            //     {(provided, snapshot) => (
-                                            //         <div
-                                            //             ref={provided.innerRef}
-                                            //             {...provided.draggableProps}
-                                            //             {...provided.dragHandleProps}
-                                            //         >
-                                                        <tr>
-                                                            <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
-                                                                <td>{row.id}</td>
-                                                            </button>
-                                                            <td>{row.name}</td>
-                                                            <td>{row.message}</td>
-                                                            <td>{row.created_at}</td>
-                                                            <td>{row.extra_junk_field}</td>
-                                                        </tr>
-                                                    // </div>
-                                                )}
-                                            {/* </Draggable> */}
-                                        {/* )}
+                        {rows.map((row, index) =>
+                            // <Draggable
+                            //     draggableId={row.id}
+                            //     key={row.id}
+                            //     index={index}
+                            // >
+                            //     {(provided, snapshot) => (
+                            //         <div
+                            //             ref={provided.innerRef}
+                            //             {...provided.draggableProps}
+                            //             {...provided.dragHandleProps}
+                            //         >
+                            <tr>
+                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
+                                    <td>{row.id}</td>
+                                </button>
+                                <td>{row.name}</td>
+                                <td>{row.message}</td>
+                                <td>{row.created_at}</td>
+                                <td>{row.extra_junk_field}</td>
+                                {/* <td>{row}</td> */}
+                            </tr>
+                            // </div>
+                        )}
+                        {/* </Draggable> */}
+                        {/* )}
 
                                     </div>
                                 )}
