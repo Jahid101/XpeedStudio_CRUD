@@ -176,10 +176,9 @@ const Update = () => {
 
 
     //For work repeating option
-    const handleWorkPlusButton = () => {
+    const handleWorkPlusButton = (j) => {
 
-        document.getElementById('repeat2').innerHTML = document.getElementById('repeat1').innerHTML;
-
+        document.getElementById(`repeat${j}`).innerHTML = document.getElementById('repeat1').innerHTML;
     }
 
 
@@ -187,6 +186,7 @@ const Update = () => {
 
 
     var i = 0;
+    var j = 2;
     return (
         <div className="container mt-5">
             <h3 className="text-center">Update</h3>
@@ -337,7 +337,7 @@ const Update = () => {
                     {repeaterStatus && <>
                         <br />
 
-                        <p onClick={handleWorkPlusButton} className="btn bg-info"> + </p>
+                        <p onClick={() => handleWorkPlusButton(j++)} className="btn bg-info"> + </p>
 
                         <div id="repeat1">
 
@@ -354,15 +354,26 @@ const Update = () => {
                                     />
                                 </div>
 
-                            )}
+                            )}<hr />
                         </div>
-                        <hr />
+                        
                     </>}
                 </>}
 
-                <div id="repeat2">
-
-                </div>
+                <div id="repeat2"></div>
+                <div id="repeat3"></div>
+                <div id="repeat4"></div>
+                <div id="repeat5"></div>
+                <div id="repeat6"></div>
+                <div id="repeat7"></div>
+                <div id="repeat8"></div>
+                <div id="repeat9"></div>
+                <div id="repeat10"></div>
+                <div id="repeat11"></div>
+                <div id="repeat12"></div>
+                <div id="repeat13"></div>
+                <div id="repeat14"></div>
+                <div id="repeat15"></div>
 
                 <br />
                 <input className="btn btn-success mb-3" type="submit" value="Submit" />
