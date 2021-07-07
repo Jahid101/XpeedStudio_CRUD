@@ -10,6 +10,7 @@ const Create = () => {
     const [fieldName, setFieldName] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     const [radio, setRadio] = useState([]);
+    const [value, setValue] = useState([]);
     const [submitted, setSubmitted] = useState([]);
     const [allField, setAllField] = useState([]);
     const [select, setSelect] = useState([]);
@@ -81,10 +82,11 @@ const Create = () => {
 
         //Sending data
         const CreateInfo = {
-            // user_name: e.target.user_name.value || ''
-            // user_email: e.target.user_email.value || '',
-            // user_gender: e.target.user_gender.value || 'male',
-            // details: e.target.details.value || ''
+            value
+            // user_name: e.target.name.value || 'N/A',
+            // user_email: e.target.email.value || 'N/A',
+            // user_gender: e.target.gender.value || 'male',
+            // details: e.target.details.value || 'N/A'
         };
         console.log(CreateInfo)
 
@@ -118,7 +120,7 @@ const Create = () => {
 
     //For form validation
     const handleBlur = (e) => {
-        console.log(e.target.name, e.target.value)
+        setValue(e.target.value)
         let isFieldValid = true;
         if (e.target.name === "user_name") {
             isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);

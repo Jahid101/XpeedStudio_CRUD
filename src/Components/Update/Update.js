@@ -17,6 +17,7 @@ const Update = () => {
     const [submitted, setSubmitted] = useState([]);
     const [allField, setAllField] = useState([]);
     const [select, setSelect] = useState([]);
+    const [value, setValue] = useState([]);
     const { id } = useParams();
 
 
@@ -115,7 +116,7 @@ const Update = () => {
 
         //updating data
         const UpdateInfo = {
-
+            value
             // user_name: e.target.user_name.value || ''
             // user_email: e.target.user_email.value || '',
             // user_gender: e.target.user_gender.value || '',
@@ -153,6 +154,7 @@ const Update = () => {
 
     //For form validation
     const handleBlur = (e) => {
+        setValue(e.target.value)
         let isFieldValid = true;
         if (e.target.name === "user_name") {
             isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);

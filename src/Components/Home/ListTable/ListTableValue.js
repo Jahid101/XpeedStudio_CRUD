@@ -44,11 +44,11 @@ const ListTableValue = ({ userInfo }) => {
     console.log(searchable)
 
 
-    // useEffect(() => {
-    //     var columnName = Object.values(rows)
-    //     columnName.map(column =>setRow(column))
-    //     // setRow(columnName)
-    // }, [rows])
+    useEffect(() => {
+        // var columnName = Object.values(rows)
+        // columnName.map(column =>setRow(column))
+        setRow(rows)
+    }, [rows])
 
     console.log(rows)
 
@@ -64,7 +64,7 @@ const ListTableValue = ({ userInfo }) => {
 
 
     const handleSearchClick = (title) => {
-        
+
         if (title === 'ID') {
             const search = rows.filter(row => row.id == searchValue)
             setSearchById(search)
@@ -100,9 +100,26 @@ const ListTableValue = ({ userInfo }) => {
     }
 
 
-    const onEnd = (result) => {
-        console.log(result)
+
+
+
+
+    /////////////////////////////////////////////////////////
+    // const [list, setList] = useState(row);
+
+    const reorder = (row, startIndex, endIndex) => {
+        const result = Array.from(row);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
     }
+
+    const onEnd = (result) => {
+        if (!result.destination) return;
+        setRow(reorder(row, result.source.index, result.destination.index));
+    }
+
 
 
     return (
@@ -121,7 +138,10 @@ const ListTableValue = ({ userInfo }) => {
 
             {allDataShowStatus ?
 
+
+
                 <table className="table">
+
                     <thead>
                         <tr>
                             {
@@ -132,55 +152,102 @@ const ListTableValue = ({ userInfo }) => {
                     </thead>
 
 
-                    <tbody>
-                        {/* <DragDropContext onDragEnd={onEnd}>
+                    {/* <tbody> */}
+
+
+                    <DragDropContext onDragEnd={onEnd}>
+                        <Droppable droppableId="12345678">
+                            {(provided, snapshot) => (
+                                <tbody
+                                    ref={provided.innerRef}
+                                >
+                                    {
+                                        rows.map((row, index) => (
+                                            <Draggable
+                                                draggableId="{row.id}"
+                                                key={row.id}
+                                                index={index}
+                                            >
+                                                {(provided, snapshot) => (
+                                                    <tr
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                    >
+                                                        {/* <tr> */}
+                                                        <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
+                                                            <td>{row.id}</td>
+                                                        </button>
+                                                        <td>{row.name}</td>
+                                                        <td>{row.message}</td>
+                                                        <td>{row.created_at}</td>
+                                                        <td>{row.extra_junk_field}</td>
+                                                        {/* <td>{row}</td> */}
+                                                        {/* </tr> */}
+                                                    </tr>
+
+                                                )}
+                                            </Draggable>
+                                        ))}
+                                    {provided.placeholder}
+                                </tbody>
+                            )}
+                            {/* </Droppable>
+                        </DragDropContext> */}
+
+                            {/* <DragDropContext onDragEnd={onEnd}>
                             <Droppable droppableId="123456789"
                             >
                                 {(provided, snapshot) = (
-                                    <div ref={provided.innerRef}> */}
+                                    <div ref={provided.innerRef}>
 
 
 
-                        {rows.map((row, index) =>
-                            // <Draggable
-                            //     draggableId={row.id}
-                            //     key={row.id}
-                            //     index={index}
-                            // >
-                            //     {(provided, snapshot) => (
-                            //         <div
-                            //             ref={provided.innerRef}
-                            //             {...provided.draggableProps}
-                            //             {...provided.dragHandleProps}
-                            //         >
-                            <tr>
-                                <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
-                                    <td>{row.id}</td>
-                                </button>
-                                <td>{row.name}</td>
-                                <td>{row.message}</td>
-                                <td>{row.created_at}</td>
-                                <td>{row.extra_junk_field}</td>
-                                {/* <td>{row}</td> */}
-                            </tr>
-                            // </div>
-                        )}
-                        {/* </Draggable> */}
-                        {/* )}
+                                        {rows.map((row, index) =>
+                                            <Draggable
+                                                draggableId={row.id}
+                                                key={row.id}
+                                                index={index}
+                                            >
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                    >
+                                                        <tr>
+                                                            <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
+                                                                <td>{row.id}</td>
+                                                            </button>
+                                                            <td>{row.name}</td>
+                                                            <td>{row.message}</td>
+                                                            <td>{row.created_at}</td>
+                                                            <td>{row.extra_junk_field}</td>
+                                                            <td>{row}</td>
+                                                        </tr>
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        )}
 
                                     </div>
                                 )}
                             </Droppable>
                         </DragDropContext> */}
-                    </tbody>
 
+                            {/* </tbody> */}
 
+                        </Droppable>
+                    </DragDropContext>
                 </table>
 
                 : ''}
 
 
             {/* Search By ID */}
+
+
+            {/* Search by Id */}
             {searchByIdStatus && <table className="table">
                 <thead>
                     <tr>
