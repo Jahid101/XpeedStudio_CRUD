@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import spin from '../../images/spinner.gif';
 import { useParams } from 'react-router-dom';
 
+
 const Update = () => {
 
+    //All hooks
     const [validStatus, setValidStatus] = useState(false);
     const [spinner, setSpinner] = useState(false);
     const [selectStatus, setSelectStatus] = useState(false);
@@ -19,8 +21,13 @@ const Update = () => {
     const [submitted, setSubmitted] = useState([]);
     const [allField, setAllField] = useState([]);
     const [select, setSelect] = useState([]);
-    const [value, setValue] = useState([]);
     const { id } = useParams();
+    const [genderValue, setGenderValue] = useState('');
+    const [nameValue, setNameValue] = useState('');
+    const [emailValue, setEmailValue] = useState('');
+    const [detailsValue, setDetailsValue] = useState('');
+    const [desgValue, setDesgValue] = useState('');
+    const [workPlaceValue, setWorkPlaceValue] = useState('');
 
 
     //For fetching the Api 
@@ -29,8 +36,6 @@ const Update = () => {
             .then(res => res.json())
             .then(data => setUserInfo(data.data.fields[0]))
     }, [id])
-    console.log(userInfo)
-    console.log(Object.values(userInfo))
 
 
     //For the name of field
@@ -38,7 +43,6 @@ const Update = () => {
         var fieldName = Object.keys(userInfo)
         setFieldName(fieldName)
     }, [userInfo])
-    console.log(fieldName)
 
 
     //For the values of field data
@@ -46,7 +50,6 @@ const Update = () => {
         var fieldData = Object.values(userInfo)
         setAllField(fieldData)
     }, [userInfo])
-    console.log(allField)
 
 
     // For Repeater Fields
@@ -56,7 +59,6 @@ const Update = () => {
         var data = Object.values(repeaterOption)
         setRepeaterOptionValues(data)
     }, [repeater, repeaterOption])
-    console.log(repeaterOption)
 
 
     //For the gender Select option
@@ -71,14 +73,12 @@ const Update = () => {
         else {
             setSelectStatus(false)
         }
-
     }, [allField])
 
 
     //For the gender Radio option
     useEffect(() => {
         const radio = allField.find(allField => allField.type === 'radio');
-        console.log(radio)
 
         if (radio) {
             setRadio(radio)
@@ -89,6 +89,7 @@ const Update = () => {
         }
 
     }, [allField])
+
 
 
     //For the work type Repeater
@@ -106,7 +107,7 @@ const Update = () => {
         }
 
     }, [allField])
-    console.log(repeater)
+
 
 
     //Getting success messages
@@ -124,11 +125,12 @@ const Update = () => {
 
         //updating data
         const UpdateInfo = {
-            value
-            // user_name: e.target.user_name.value || ''
-            // user_email: e.target.user_email.value || '',
-            // user_gender: e.target.user_gender.value || '',
-            // details: e.target.details.value || ''
+            user_name: nameValue,
+            user_email: emailValue,
+            details: detailsValue,
+            user_gender: genderValue,
+            designation: desgValue,
+            work_place: workPlaceValue
         };
 
         if (validStatus) {
@@ -158,10 +160,23 @@ const Update = () => {
 
     //For form validation
     const handleBlur = (e) => {
-        setValue(e.target.value)
+        setGenderValue(e.target.value)
         let isFieldValid = true;
         if (e.target.name === "user_name") {
             isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);
+            setNameValue(e.target.value || '')
+        }
+        if (e.target.name === "user_email") {
+            setEmailValue(e.target.value || '')
+        }
+        if (e.target.name === "details") {
+            setDetailsValue(e.target.value || '')
+        }
+        if (e.target.name === "designation") {
+            setDesgValue(e.target.value || '')
+        }
+        if (e.target.name === "work_place") {
+            setWorkPlaceValue(e.target.value || '')
         }
 
         if (isFieldValid) {
@@ -176,26 +191,25 @@ const Update = () => {
     }
 
 
+
     //For work repeating option
     const handleWorkButton = () => {
         setShowRepeaterOption(true)
-        console.log('asdas')
     }
 
 
     //For work repeating option
     const handleWorkPlusButton = (j) => {
-
         document.getElementById(`repeat${j}`).innerHTML = document.getElementById('repeat1').innerHTML;
     }
 
 
 
-
-
     var i = 0;
     var j = 2;
+
     return (
+
         <div className="container mt-5">
             <h3 className="text-center">Update</h3>
 
@@ -355,6 +369,7 @@ const Update = () => {
                                     <label>{allField.title}</label>
                                     <input
                                         onBlur={handleBlur}
+                                        name={allField.title}
                                         autoFocus
                                         type={allField.type}
                                         placeholder={allField.title}

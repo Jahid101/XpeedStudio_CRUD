@@ -4,9 +4,9 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const ListTableValue = ({ userInfo }) => {
 
+    // All hooks and props destruction
     const { headers, rows } = userInfo;
     const history = useHistory();
-
     const [tableHeader, setTableHeader] = useState([]);
     const [hidden, setHidden] = useState([]);
     const [row, setRow] = useState([]);
@@ -25,32 +25,20 @@ const ListTableValue = ({ userInfo }) => {
         var columnName = Object.values(headers[0])
         setTableHeader(columnName)
     }, [headers])
-    console.log(tableHeader)
 
 
+    //filtering hidden data
     useEffect(() => {
         let hidden = tableHeader.filter(tableHeader => tableHeader.hidden === false)
-
         setHidden(hidden);
     }, [tableHeader])
-    console.log(hidden)
 
 
+    //filtering searchable fields
     useEffect(() => {
         let search = hidden.filter(hidden => hidden.searchable === true)
-
         setSearchable(search);
     }, [hidden])
-    console.log(searchable)
-
-
-    useEffect(() => {
-        // var columnName = Object.values(rows)
-        // columnName.map(column =>setRow(column))
-        setRow(rows)
-    }, [rows])
-
-    console.log(rows)
 
 
     const handleOnClick = (id) => {
@@ -58,11 +46,13 @@ const ListTableValue = ({ userInfo }) => {
     }
 
 
+    // taking the searching value
     const handleOnBlur = (e) => {
         setSearchValue(e.target.value)
     }
 
 
+    // For searching 
     const handleSearchClick = (title) => {
 
         if (title === 'ID') {
@@ -92,6 +82,7 @@ const ListTableValue = ({ userInfo }) => {
     }
 
 
+    //For the searched button
     const handleClickShowAllButton = () => {
         setAllDataShowStatus(true)
         setSearchByDateStatus(false)
@@ -101,12 +92,7 @@ const ListTableValue = ({ userInfo }) => {
 
 
 
-
-
-
-    /////////////////////////////////////////////////////////
-    // const [list, setList] = useState(row);
-
+    //For reorder dragging 
     const reorder = (row, startIndex, endIndex) => {
         const result = Array.from(row);
         const [removed] = result.splice(startIndex, 1);
@@ -128,6 +114,8 @@ const ListTableValue = ({ userInfo }) => {
             {!allDataShowStatus && <button onClick={handleClickShowAllButton} style={{ marginLeft: '91%' }} className="btn btn-info">Show all</button>}
             <br />
 
+
+            {/* Search fields */}
             {searchable.map(search =>
                 <>
                     <input className="ms-5 mb-3" placeholder={search.title} onBlur={handleOnBlur} type="search" name="" id="" />
@@ -137,8 +125,6 @@ const ListTableValue = ({ userInfo }) => {
 
 
             {allDataShowStatus ?
-
-
 
                 <table className="table">
 
@@ -152,9 +138,8 @@ const ListTableValue = ({ userInfo }) => {
                     </thead>
 
 
-                    {/* <tbody> */}
 
-
+                    {/* Draggable part */}
                     <DragDropContext onDragEnd={onEnd}>
                         <Droppable droppableId="12345678">
                             {(provided, snapshot) => (
@@ -174,7 +159,6 @@ const ListTableValue = ({ userInfo }) => {
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
                                                     >
-                                                        {/* <tr> */}
                                                         <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
                                                             <td>{row.id}</td>
                                                         </button>
@@ -182,8 +166,6 @@ const ListTableValue = ({ userInfo }) => {
                                                         <td>{row.message}</td>
                                                         <td>{row.created_at}</td>
                                                         <td>{row.extra_junk_field}</td>
-                                                        {/* <td>{row}</td> */}
-                                                        {/* </tr> */}
                                                     </tr>
 
                                                 )}
@@ -192,59 +174,12 @@ const ListTableValue = ({ userInfo }) => {
                                     {provided.placeholder}
                                 </tbody>
                             )}
-                            {/* </Droppable>
-                        </DragDropContext> */}
-
-                            {/* <DragDropContext onDragEnd={onEnd}>
-                            <Droppable droppableId="123456789"
-                            >
-                                {(provided, snapshot) = (
-                                    <div ref={provided.innerRef}>
-
-
-
-                                        {rows.map((row, index) =>
-                                            <Draggable
-                                                draggableId={row.id}
-                                                key={row.id}
-                                                index={index}
-                                            >
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                    >
-                                                        <tr>
-                                                            <button onClick={() => handleOnClick(row.id)} className="btn btn-info btn-sm m-1">
-                                                                <td>{row.id}</td>
-                                                            </button>
-                                                            <td>{row.name}</td>
-                                                            <td>{row.message}</td>
-                                                            <td>{row.created_at}</td>
-                                                            <td>{row.extra_junk_field}</td>
-                                                            <td>{row}</td>
-                                                        </tr>
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        )}
-
-                                    </div>
-                                )}
-                            </Droppable>
-                        </DragDropContext> */}
-
-                            {/* </tbody> */}
-
                         </Droppable>
                     </DragDropContext>
                 </table>
 
                 : ''}
 
-
-            {/* Search By ID */}
 
 
             {/* Search by Id */}

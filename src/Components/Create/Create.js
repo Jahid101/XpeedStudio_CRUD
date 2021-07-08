@@ -12,10 +12,13 @@ const Create = () => {
     const [fieldName, setFieldName] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     const [radio, setRadio] = useState([]);
-    const [value, setValue] = useState([]);
     const [submitted, setSubmitted] = useState([]);
     const [allField, setAllField] = useState([]);
     const [select, setSelect] = useState([]);
+    const [genderValue, setGenderValue] = useState('');
+    const [nameValue, setNameValue] = useState('');
+    const [emailValue, setEmailValue] = useState('');
+    const [detailsValue, setDetailsValue] = useState('');
 
 
     //For fetching the Api data
@@ -24,7 +27,6 @@ const Create = () => {
             .then(res => res.json())
             .then(data => setUserInfo(data.data.fields[0]))
     }, [])
-    console.log(userInfo)
 
 
     //For the name of field
@@ -32,7 +34,7 @@ const Create = () => {
         var fieldName = Object.keys(userInfo)
         setFieldName(fieldName)
     }, [userInfo])
-    console.log(fieldName)
+
 
 
     //For the values of field data
@@ -40,13 +42,12 @@ const Create = () => {
         var fieldData = Object.values(userInfo)
         setAllField(fieldData)
     }, [userInfo])
-    console.log(allField)
+
 
 
     //For the gender Select option
     useEffect(() => {
         const res = allField.find(allField => allField.type === 'select');
-        console.log(res)
 
         if (res) {
             setSelect(res)
@@ -62,7 +63,6 @@ const Create = () => {
     //For the gender Radio option
     useEffect(() => {
         const radio = allField.find(allField => allField.type === 'radio');
-        console.log(radio)
 
         if (radio) {
             setRadio(radio)
@@ -90,13 +90,11 @@ const Create = () => {
 
         //Sending data
         const CreateInfo = {
-            value
-            // user_name: e.target.name.value || 'N/A',
-            // user_email: e.target.email.value || 'N/A',
-            // user_gender: e.target.gender.value || 'male',
-            // details: e.target.details.value || 'N/A'
+            user_name: nameValue,
+            user_email: emailValue,
+            details: detailsValue,
+            user_gender: genderValue
         };
-        console.log(CreateInfo)
 
         if (validStatus) {
             const url = `http://localhost/api/submit_form.php`;
@@ -112,12 +110,12 @@ const Create = () => {
 
 
         //Showing success messages
-       if (submitted.status) {
+        if (submitted.status) {
             for (let i = 0; i < submitted.messages.length; i++) {
-                setTimeout(function(){ alert(submitted.messages[i]); }, 1000);
+                setTimeout(function () { alert(submitted.messages[i]); }, 1000);
             }
             e.target.reset();
-            setTimeout(function(){ setSpinner(false); }, 1000)
+            setTimeout(function () { setSpinner(false); }, 1000)
         }
     }
 
@@ -125,10 +123,18 @@ const Create = () => {
 
     //For form validation
     const handleBlur = (e) => {
-        setValue(e.target.value)
+
+        setGenderValue(e.target.value)
         let isFieldValid = true;
         if (e.target.name === "user_name") {
             isFieldValid = /^[A-Za-z ]+$/.test(e.target.value);
+            setNameValue(e.target.value || '')
+        }
+        if (e.target.name === "user_email") {
+            setEmailValue(e.target.value || '')
+        }
+        if (e.target.name === "details") {
+            setDetailsValue(e.target.value || '')
         }
 
         if (isFieldValid) {
@@ -144,9 +150,10 @@ const Create = () => {
 
 
 
-
     var i = 0;
+
     return (
+
         <div className="container mt-5">
             <h3 className="text-center">Create</h3>
             <form onSubmit={handleSubmit}>
@@ -230,9 +237,9 @@ const Create = () => {
                 <br />
 
                 {!spinner ?
-                <input className="btn btn-success mb-5" type="submit" value="Submit" />
-                :
-                <img style={{ height: '100px' }} src={spin} alt="" />
+                    <input className="btn btn-success mb-5" type="submit" value="Submit" />
+                    :
+                    <img style={{ height: '100px' }} src={spin} alt="" />
                 }
 
             </form>
